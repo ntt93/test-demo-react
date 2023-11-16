@@ -14,7 +14,8 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        My name is {this.state.name} from {this.state.address}
+        Hello World!
+        <MyComponent></MyComponent>
       </div>
     );
   }
