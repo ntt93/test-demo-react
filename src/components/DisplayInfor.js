@@ -22,11 +22,12 @@ class DisplayInfor extends React.Component {
               : "Show list users:"}
           </span>
         </div>
+
         {listUsers.map((user) => {
           return (
-            <div>
+            <div key={user.id}>
               {this.state.isShowListUser && (
-                <div key={user.id} className={+user.age > 18 ? "green" : "red"}>
+                <div className={+user.age > 18 ? "green" : "red"}>
                   <div>My name is {user.name}</div>
                   <div>My age is {user.age}</div>
                   <hr />
