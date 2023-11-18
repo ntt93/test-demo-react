@@ -3,6 +3,7 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { FcPlus } from "react-icons/fc";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const ModalCreateUser = (props) => {
   const { show, setShow } = props;
@@ -34,17 +35,26 @@ const ModalCreateUser = (props) => {
   };
 
   const handleSubmitCreatUser = async () => {
-    //validate
-    //call apis
-    // let date = {
-    //   email: email,
-    //   password: password,
-    //   username: username,
-    //   role: role,
-    //   userImage: image,
-    // };
-    // console.log(data);
+    const validateEmail = (email) => {
+      return String(email)
+        .toLowerCase()
+        .match(
+          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        );
+    };
 
+    //validate
+    const isValidEmail = validateEmail(email);
+    if (!isValidEmail) {
+      toast.error("Invalid email");
+      return;
+    }
+
+    if (!password) {
+      toast.error("Invalid password");
+      return;
+    }
+    //submit data
     const FormData = require("form-data");
 
     const data = new FormData();
@@ -58,8 +68,17 @@ const ModalCreateUser = (props) => {
       "http://localhost:8081/api/v1/participant",
       data
     );
-    console.log("res: ", res);
+    console.log("res: ", res.data);
+    if (res.data && res.data.EC === 0) {
+      toast.success(res.data.EM);
+      handleClose();
+    }
+
+    if (res.data && res.data.EC !== 0) {
+      toast.error(res.data.EM);
+    }
   };
+
   return (
     <>
       <Modal
